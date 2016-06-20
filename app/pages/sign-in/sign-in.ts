@@ -5,7 +5,7 @@ import { HelloIonicPage } from '../hello-ionic';
 import { JwtService } from '../../providers/jwt-service';
 import { EmailValidator } from '../../components/email-validator';
 import { HttpClient } from 'marix';
-import { fromJQueryPromise, delayPromise } from '../../utils/promise-wrapper';
+import { fromJQueryPromise, delayPromise } from '../../utils/promise-utils';
 
 interface Login {
 	email:string,
@@ -34,13 +34,17 @@ export class SignInPage {
   displayErrorText = "";
 
   signIn() {
+    console.info('signing in');
 		let loading = Loading.create({ content: 'logging into marix...' });
 		this.nav.present(loading);
 
-    console.info('signing in');
-		delayPromise(1000)
-			.then(() => fromJQueryPromise(this.httpClient.login(this.login.email, this.login.password)))
-      .then((o) => {
+    // kick off login request
+    let loginRequest = this.httpClient.login(this.login.email, this.login.password);
+
+    // login promise chain
+		delayPromise(500) // make sure the spinner is up for at least 500 millis
+			.then(() => fromJQueryPromise(loginRequest))
+      .then(() => {
         loading.dismiss();
         this.nav.setRoot(HelloIonicPage);
       })
@@ -48,9 +52,11 @@ export class SignInPage {
         loading.dismiss();
         if(error.status == 400){
           this.displayErrorText = 'invalid credentials';
-          this.active = false;
-          setTimeout(() => this.active = true, 0);
+        } else {
+          this.displayErrorText = 'unknown problem';
         }
+        this.active = false;
+        setTimeout(() => this.active = true, 0);  // hack in the angular 2 forms documentation
       });
   }
 

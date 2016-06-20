@@ -1,1 +1,1 @@
-export * from './promise-wrapper';
+export * from './promise-utils';
