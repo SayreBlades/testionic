@@ -1,14 +1,26 @@
-<ion-menu [content]="content" enabled="true">
-
-  <ion-toolbar>
-    <ion-title>Pages</ion-title>
-  </ion-toolbar>
+<ion-menu [content]="content">
 
   <ion-content>
     <ion-list>
+      <ion-list-header>
+        account
+      </ion-list-header>
+      <button *ngIf='account && account.email' ion-item (click)="closeMenu()">
+        <ion-icon name="person" item-left></ion-icon>
+        {{account.email}}
+      </button>
+      <button ion-item (click)="signOut()">
+        <ion-icon danger name="power" item-left></ion-icon>
+        sign out
+      </button>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header>
+        blah
+      </ion-list-header>
       <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
         <ion-icon name="text"></ion-icon>
-
         {{p.title}}
       </button>
     </ion-list>

@@ -26,8 +26,8 @@ export class MyApp {
 
 
   constructor(
-		private jwtService:JwtService,
-    private httpClient:HttpClient,
+		private jwtService: JwtService,
+    private httpClient: HttpClient,
     private platform: Platform,
     private menu: MenuController
   ) {
@@ -46,6 +46,15 @@ export class MyApp {
     });
   }
 
+  closeMenu(){
+    this.menu.close();
+  }
+
+  signOut(){
+    this.jwtService.clear();
+    this.menu.close();
+    this.nav.setRoot(LandingPage);
+  }
 
   openPage(page) {
     // close the menu when clicking a link from the menu
@@ -54,13 +63,4 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
-  menuEnabled(){
-    // console.info("", this.nav.root, HelloIonicPage, this.nav.root == HelloIonicPage);
-		let v = this.nav.root == HelloIonicPage;
-		console.info("this.nav.root == HelloIonicPage: ", v);
-    return false;
-    // let ret = (this.nav.root == HelloIonicPage);
-    // console.info('menuEnabled', ret);
-    // return ret;
-  }
 }

@@ -20,7 +20,7 @@ interface Login {
 export class SignInPage {
 
   constructor(
-		private jwt: JwtService,
+		private jwtService: JwtService,
 		private nav: NavController,
     private httpClient: HttpClient
 	) {}
@@ -31,6 +31,7 @@ export class SignInPage {
 	};
 
   active = true;
+
   displayErrorText = "";
 
   signIn() {
@@ -38,19 +39,20 @@ export class SignInPage {
 		let loading = Loading.create({ content: 'logging into marix...' });
 		this.nav.present(loading);
 
-    // kick off login request
+    // kick off login http request
     let loginRequest = this.httpClient.login(this.login.email, this.login.password);
 
-    // login promise chain
+    // begin the login promise chain
 		delayPromise(500) // make sure the spinner is up for at least 500 millis
 			.then(() => fromJQueryPromise(loginRequest))
-      .then(() => {
+      .then((token) => {
         loading.dismiss();
+        this.jwtService.token = token;
         this.nav.setRoot(HelloIonicPage);
       })
       .catch((error)=> {
         loading.dismiss();
-        if(error.status == 400){
+        if(error.status == 400 || error.status == 404){
           this.displayErrorText = 'invalid credentials';
         } else {
           this.displayErrorText = 'unknown problem';
