@@ -7,11 +7,8 @@
   <ion-content>
     <ion-list>
       <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        <ion-avatar item-left>
-          <img src="https://pbs.twimg.com/profile_images/638751551457103872/KN-NzuRl.png">
-        </ion-avatar>
-
         <ion-icon name="text"></ion-icon>
+
         {{p.title}}
       </button>
     </ion-list>

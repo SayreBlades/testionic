@@ -2,7 +2,8 @@ var gulp = require('gulp'),
     gulpWatch = require('gulp-watch'),
     del = require('del'),
     runSequence = require('run-sequence'),
-    argv = process.argv;
+    argv = process.argv
+    cleanCSS = require('gulp-clean-css');
 
 
 /**
@@ -37,21 +38,29 @@ var isRelease = argv.indexOf('--release') > -1;
 
 gulp.task('watch', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts'],
+    ['sass', 'html', 'fonts', 'scripts', 'css'],
     function(){
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
       gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
       buildBrowserify({
         watch: true,
-        src: ['./app/bootstrap.ts', './typings/main.d.ts', './typings/marix.d.ts', './typings/modules/lodash/index.d.ts', './typings/globals/validator/index.d.ts']
+        src: [
+          './app/bootstrap.ts',
+          './typings/main.d.ts',
+          './typings/marix.d.ts',
+          './typings/modules/lodash/index.d.ts',
+          './typings/globals/validator/index.d.ts',
+          './typings/globals/jquery/index.d.ts'
+        ]
       }).on('end', done);
     }
   );
 });
 
+
 gulp.task('build', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts'],
+    ['sass', 'html', 'fonts', 'scripts', 'css'],
     function(){
       buildBrowserify({
         minify: isRelease,
@@ -61,10 +70,23 @@ gulp.task('build', ['clean'], function(done){
         uglifyOptions: {
           mangle: false
         },
-        src: ['./app/bootstrap.ts', './typings/main.d.ts', './typings/marix.d.ts', './typings/modules/lodash/index.d.ts', './typings/globals/validator/index.d.ts']
+        src: [
+          './app/bootstrap.ts',
+          './typings/main.d.ts',
+          './typings/marix.d.ts',
+          './typings/modules/lodash/index.d.ts',
+          './typings/globals/validator/index.d.ts',
+          './typings/globals/jquery/index.d.ts'
+        ]
       }).on('end', done);
     }
   );
+});
+
+gulp.task('css', function() {
+  return gulp.src('app/**/*.css')
+    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(gulp.dest('www/build/css/'));
 });
 
 gulp.task('sass', buildSass);

@@ -4,7 +4,7 @@
 
 <ion-content class="sign-in">
 
-	<form #signin="ngForm" (ngSubmit)="signIn()">
+  <form #signin="ngForm" *ngIf="active" > 
 		<ion-list>
 			<ion-item>
 				<ion-input type="email" placeholder="email" required [(ngModel)]="login.email" validate-email ngControl="email"></ion-input>
@@ -13,8 +13,9 @@
 				<ion-input type="password" placeholder="password" required [(ngModel)]="login.password" ngControl="password"></ion-input>
 			</ion-item>
 		</ion-list>
-		<div padding>
-			<button type="submit" block (click)="signIn()" [disabled]="!signin.form.valid">sign in</button>
+		<div style="text-align:center;" padding>
+      <p *ngIf="displayErrorText && signin.form.pristine" danger> {{displayErrorText}} </p>
+			<button round type="submit" block (click)="signIn()" [disabled]="!signin.form.valid">sign in</button>
 		</div>
 	</form>
 	

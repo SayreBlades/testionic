@@ -17,7 +17,7 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   // make HelloIonicPage the root (or first) page
-  rootPage: any = SignInPage;
+  rootPage: any = LandingPage;
   pages = [
 		{ title: 'Hello Ionic', component: HelloIonicPage },
 		{ title: 'My First List', component: ListPage },
