@@ -4,9 +4,10 @@ import {StatusBar} from 'ionic-native';
 import {HelloIonicPage} from './pages/hello-ionic/hello-ionic';
 import {ListPage} from './pages/list/list';
 import {TetPage} from './pages/tet/tet';
-import {LandingPage} from './pages/landing/landing';
-import * as _ from 'lodash';
-import { HttpClient } from 'marix';
+import {LandingPage} from './pages/landing';
+import {SignInPage} from './pages/sign-in';
+import {HttpClient} from 'marix';
+import {JwtService} from './providers/jwt-service';
 
 
 @Component({
@@ -16,23 +17,25 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   // make HelloIonicPage the root (or first) page
-  rootPage: any = HelloIonicPage;
-  pages: Array<{title: string, component: any}>;
+  rootPage: any = SignInPage;
+  pages = [
+		{ title: 'Hello Ionic', component: HelloIonicPage },
+		{ title: 'My First List', component: ListPage },
+		{ title: 'Tet', component: TetPage }
+	];
+
 
   constructor(
+		private jwtService:JwtService,
     private httpClient:HttpClient,
     private platform: Platform,
     private menu: MenuController
   ) {
     this.initializeApp();
     console.info('MyApp constructor');
-
-    // set our app's pages
-    this.pages = [
-      { title: 'Hello Ionic', component: HelloIonicPage },
-      { title: 'My First List', component: ListPage },
-      { title: 'Tet', component: TetPage },
-    ];
+		if(this.jwtService.token){
+			this.rootPage = HelloIonicPage;
+		}
   }
 
   initializeApp() {
@@ -43,10 +46,6 @@ export class MyApp {
     });
   }
 
-	// menuEnabled(){
-    // return false;
-    // //
-  // }
 
   openPage(page) {
     // close the menu when clicking a link from the menu

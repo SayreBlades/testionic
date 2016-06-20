@@ -5,6 +5,7 @@ declare module "marix" {
 
   class HttpClient {
     constructor(host:string)
+    login(email:string, password:string):Promise<any>
   }
 
 }

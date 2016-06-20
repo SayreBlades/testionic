@@ -43,7 +43,7 @@ gulp.task('watch', ['clean'], function(done){
       gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
       buildBrowserify({
         watch: true,
-        src: ['./app/bootstrap.ts', './typings/main.d.ts', './typings/marix.d.ts', './typings/modules/lodash/index.d.ts']
+        src: ['./app/bootstrap.ts', './typings/main.d.ts', './typings/marix.d.ts', './typings/modules/lodash/index.d.ts', './typings/globals/validator/index.d.ts']
       }).on('end', done);
     }
   );
@@ -61,7 +61,7 @@ gulp.task('build', ['clean'], function(done){
         uglifyOptions: {
           mangle: false
         },
-        src: ['./app/bootstrap.ts', './typings/main.d.ts', './typings/marix.d.ts', './typings/modules/lodash/index.d.ts']
+        src: ['./app/bootstrap.ts', './typings/main.d.ts', './typings/marix.d.ts', './typings/modules/lodash/index.d.ts', './typings/globals/validator/index.d.ts']
       }).on('end', done);
     }
   );
